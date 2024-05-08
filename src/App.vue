@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <users-list></users-list>
+  </div>
+  <div class="container">
     <!-- if animatedBlock is true animate class will be added from css -->
     <div class="block" :class="{ animate: animatedBlock }"></div>
     <button @click="animateBlock">Animate</button>
@@ -7,7 +10,7 @@
 
   <div class="container">
     <transition
-     :css="false"
+      :css="false"
       @before-enter="beforeEnter"
       @before-leave="beforeLeave"
       @enter="enter"
@@ -40,7 +43,9 @@
 </template>
 
 <script>
+import UsersList from './components/UsersList.vue';
 export default {
+  components: { UsersList },
   data() {
     return {
       dialogIsVisible: false,
