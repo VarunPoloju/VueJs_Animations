@@ -14,6 +14,8 @@
       @after-enter="afterEnter"
       @leave="leave"
       @after-leave="afterLeave"
+      @enter-cancelled="enterCancelled"
+      @leave-cancelled="leaveCancelled"
     >
       <p v-if="paraisvisible">Sometimes visible</p>
     </transition>
@@ -45,32 +47,64 @@ export default {
       animatedBlock: false,
       paraisvisible: false,
       usersAreVisible: false,
+      enterInterval: null,
+      leaveInterval: null,
     };
   },
   methods: {
     beforeEnter(ele) {
       console.log('before-enter');
       console.log(ele);
+      ele.style.opacity = 0;
     },
     beforeLeave(ele) {
       console.log('before-leave');
       console.log(ele);
+      ele.style.opacity = 1;
     },
-    enter(ele) {
+    enter(ele, done) {
       console.log('enter');
       console.log(ele);
+      let round = 1;
+      this.enterInterval = setInterval(() => {
+        ele.style.opacity = round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(this.enterInterval);
+          done();
+        }
+      }, 20);
     },
     afterEnter(ele) {
       console.log('afterEnter');
       console.log(ele);
     },
-    leave(ele) {
+    leave(ele, done) {
       console.log('leave');
       console.log(ele);
+      let round = 1;
+      this.leaveInterval = setInterval(() => {
+        ele.style.opacity = 1 - round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(this.leaveInterval);
+          done();
+        }
+      }, 20);
     },
     afterLeave(ele) {
       console.log('afterLeave');
       console.log(ele);
+    },
+    enterCancelled(ele) {
+      console.log('enterCancelled');
+      console.log(ele);
+      clearInterval(this.enterInterval);
+    },
+    leaveCancelled(ele) {
+      console.log('leaveCancelled');
+      console.log(ele);
+      clearInterval(this.leaveInterval);
     },
     showDialog() {
       this.dialogIsVisible = true;
@@ -128,33 +162,6 @@ button:active {
 
 .animate {
   animation: slide-fade 0.3s ease-out forwards;
-}
-
-.para-enter-from {
-  /* opacity: 0;
-  transform: translateY(-30px); */
-}
-.para-enter-active {
-  animation: slide-scale 2s ease-out;
-}
-
-.para-enter-to {
-  /* opacity: 1;
-  transform: translateY(0); */
-}
-
-.para-leave-from {
-  /* opacity: 1;
-  transform: translateY(0); */
-}
-
-.para-leave-active {
-  animation: slide-scale 0.3s ease-out;
-}
-
-.para-leave-to {
-  /* opacity: 0;
-  transform: translateY(30px); */
 }
 
 .fade-button-enter-from,
