@@ -6,14 +6,22 @@
   </div>
 
   <div class="container">
-    <transition name="para">
+    <transition
+      name="para"
+      @before-enter="beforeEnter"
+      @before-leave="beforeLeave"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @leave="leave"
+      @after-leave="afterLeave"
+    >
       <p v-if="paraisvisible">Sometimes visible</p>
     </transition>
     <button @click="togglePara">Toggle Paragraph</button>
   </div>
 
   <div class="container">
-    <transition name="fade-button" mode="out-in">
+    <transition name="fade-button" mode="in-out">
       <button @click="showUser" v-if="!usersAreVisible">Show users</button>
       <button @click="hideUser" v-else>Hide users</button>
     </transition>
@@ -40,6 +48,30 @@ export default {
     };
   },
   methods: {
+    beforeEnter(ele) {
+      console.log('before-enter');
+      console.log(ele);
+    },
+    beforeLeave(ele) {
+      console.log('before-leave');
+      console.log(ele);
+    },
+    enter(ele) {
+      console.log('enter');
+      console.log(ele);
+    },
+    afterEnter(ele) {
+      console.log('afterEnter');
+      console.log(ele);
+    },
+    leave(ele) {
+      console.log('leave');
+      console.log(ele);
+    },
+    afterLeave(ele) {
+      console.log('afterLeave');
+      console.log(ele);
+    },
     showDialog() {
       this.dialogIsVisible = true;
     },
@@ -103,7 +135,7 @@ button:active {
   transform: translateY(-30px); */
 }
 .para-enter-active {
-  animation: slide-scale 0.3s ease-out;
+  animation: slide-scale 2s ease-out;
 }
 
 .para-enter-to {
